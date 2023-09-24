@@ -13,6 +13,10 @@ builder.Services.AddDbContext<NorthwindContext>(options => options.UseSqlServer(
 //Scoped
 builder.Services.AddScoped<ISupplierRepository, SupplierService>();
 
+builder.Services.AddScoped<IShipperRepository, ShipperService>();
+
+builder.Services.AddScoped<IOrderRepository, OrderService>();
+
 //Disturbed Session Configure
 builder.Services.AddDistributedMemoryCache();
 
@@ -29,7 +33,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORS", cors =>
     {
-        cors.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:7020");
+        cors.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:7089");
     });
 });
 
