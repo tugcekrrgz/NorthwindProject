@@ -22,7 +22,7 @@ namespace Northwind.BLL.Services
         {
             try
             {
-                var details = _context.Orders.Select(x => new OrderDTO
+                var details = _context.Orders.Where(x => x.OrderId==id).Select(x => new OrderDTO
                 {
                     OrderId = id,
                     OrderDate = x.OrderDate,    
