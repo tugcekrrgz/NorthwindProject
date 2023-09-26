@@ -15,6 +15,10 @@ builder.Services.AddScoped<ISupplierRepository, SupplierService>();
 
 builder.Services.AddScoped<IShipperRepository, ShipperService>();
 
+builder.Services.AddScoped<IProductRepository, ProductService>();
+
+builder.Services.AddScoped<ICategoryRepository,CategoryService>();
+
 builder.Services.AddScoped<IOrderRepository, OrderService>();
 
 //Disturbed Session Configure
