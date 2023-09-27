@@ -9,7 +9,12 @@ namespace Northwind.BLL.Repositories
 {
     public interface IOrderRepository
     {
-        IEnumerable<OrderDTO> GetOrders();
-        OrderDTO Details(int id);
+        IEnumerable<OrderDateDTO> GetOrderDates();
+        OrderDateDTO Details(int id);
+
+
+        IEnumerable<CountrySaleDTO> GetOrdersInYear(int orderYear);
+        IEnumerable<ShipStatusDTO> GetShipStatus();
+        IEnumerable<MonthlyRevenueDTO> GetMonthlyRevenue(int year, int month);
     }
 }

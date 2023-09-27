@@ -18,16 +18,14 @@ namespace Northwind.BLL.Services
             _context = context;
         }
 
-        public OrderDTO Details(int id)
+        public OrderDateDTO Details(int id)
         {
             try
             {
-                var details = _context.Orders.Where(x => x.OrderId==id).Select(x => new OrderDTO
+                var details = _context.Orders.Where(x => x.OrderId==id).Select(x => new OrderDateDTO
                 {
                     OrderId = id,
-                    OrderDate = x.OrderDate,    
-                    OrderDetail= _context.OrderDetails.Where(od => od.OrderId == id).ToList(),
-                    
+                    OrderDate = x.OrderDate
                 }).FirstOrDefault();
 
                 return details;
@@ -38,21 +36,60 @@ namespace Northwind.BLL.Services
             }
         }
 
-        public IEnumerable<OrderDTO> GetOrders()
+        public IEnumerable<MonthlyRevenueDTO> GetMonthlyRevenue(int year, int month)
         {
-            try
+            var monthlyRevenue = from o in _context.Orders
+                                 join od in _context.OrderDetails on o.OrderId equals od.OrderId
+                                 where o.OrderDate.Value.Year == year && o.OrderDate.Value.Month == month
+                                 group new { o.OrderDate, od.Quantity, od.UnitPrice } by o.OrderDate into orderDateGroup
+                                 orderby orderDateGroup.Sum(x => x.Quantity * x.UnitPrice) descending
+                                 select new MonthlyRevenueDTO
+                                 {
+                                     Date = orderDateGroup.Key,
+                                     Revenue = orderDateGroup.Sum(x => x.UnitPrice*x.Quantity)
+                                 };
+            return monthlyRevenue;
+        }
+
+        public IEnumerable<OrderDateDTO> GetOrderDates()
+        {
+            var salesDate = from o in _context.Orders
+                            join od in _context.OrderDetails on o.OrderId equals od.OrderId
+
+                            select new OrderDateDTO
+                            {
+                                OrderDate=o.OrderDate,
+                                OrderId=od.OrderId
+                            };
+            return salesDate;
+        }
+
+        public IEnumerable<CountrySaleDTO> GetOrdersInYear(int orderYear)
+        {
+            var salefOfYear = from o in _context.Orders
+                              join od in _context.OrderDetails on o.OrderId equals od.OrderId
+                              where o.OrderDate.Value.Year == orderYear
+                              group new { o.ShipCountry, od.Quantity, od.UnitPrice } by o.ShipCountry into countryGroup
+                              orderby countryGroup.Sum(x => x.Quantity * x.UnitPrice) descending
+                              select new CountrySaleDTO
+                              {
+                                  ShipCountry=countryGroup.Key,
+                                  TotalOrders=countryGroup.Sum(x => x.Quantity*x.UnitPrice),
+                                  OrderDate=orderYear
+                              };
+            return salefOfYear;
+        }
+
+        public IEnumerable<ShipStatusDTO> GetShipStatus()
+        {
+            var shipStatus = _context.Orders.Select(x => new ShipStatusDTO
             {
-                var orderDto = _context.Orders.Select(x => new OrderDTO
-                {
-                    OrderId = x.OrderId,
-                    OrderDate = x.OrderDate
-                });
-                return orderDto.ToList();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.ToString());
-            }
+                OrderId=x.OrderId,
+                //Ternary if
+                Status = x.ShippedDate == null ? Enums.ShipStatus.Bekliyor : Enums.ShipStatus.Tasimada
+            }) ;
+
+            return shipStatus;
         }
     }
 }

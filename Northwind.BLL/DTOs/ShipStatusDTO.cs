@@ -1,4 +1,4 @@
-﻿using Northwind.DAL.Models;
+﻿using Northwind.BLL.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +7,9 @@ using System.Threading.Tasks;
 
 namespace Northwind.BLL.DTOs
 {
-    public class OrderDTO
+    public class ShipStatusDTO
     {
+        public ShipStatus Status { get; set; }
         public int OrderId { get; set; }
-        public DateTime? OrderDate { get; set; }
-
-        public List<OrderDetail>? OrderDetail { get; set; }
-
-
     }
 }
