@@ -25,8 +25,6 @@ builder.Services.AddScoped<IOrderRepository, OrderService>();
 //Disturbed Session Configure
 builder.Services.AddDistributedMemoryCache();
 
-//Identity Service
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<NorthwindContext>();
 
 //Session
 builder.Services.AddSession(options =>
