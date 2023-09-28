@@ -7,10 +7,10 @@ using Northwind.DAL.Models;
 
 namespace Northwind.BLL.DTOs
 {
-    public class CategoryDTO
+    public class RegisterDTO
     {
-        public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
-        public string Description { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
     }
 }

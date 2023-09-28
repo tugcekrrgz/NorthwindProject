@@ -1,6 +1,6 @@
 ﻿using Northwind.BLL.DTOs;
 using Northwind.BLL.Repositories;
-using Northwind.DAL.Models.Context;
+using Northwind.DAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

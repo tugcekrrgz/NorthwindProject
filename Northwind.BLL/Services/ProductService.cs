@@ -1,11 +1,6 @@
 ﻿using Northwind.BLL.DTOs;
 using Northwind.BLL.Repositories;
-using Northwind.DAL.Models.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Northwind.DAL.Models;
 
 namespace Northwind.BLL.Services
 {

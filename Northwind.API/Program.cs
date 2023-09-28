@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Northwind.DAL.Models.Context;
+using Northwind.DAL.Models;
 using Northwind.BLL.Repositories;
 using Northwind.BLL.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IOrderRepository, OrderService>();
 
 //Disturbed Session Configure
 builder.Services.AddDistributedMemoryCache();
+
+//Identity Service
+builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<NorthwindContext>();
 
 //Session
 builder.Services.AddSession(options =>

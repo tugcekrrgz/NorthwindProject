@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace Northwind.DAL.Models.Context;
+namespace Northwind.DAL.Models;
 
 public partial class NorthwindContext : DbContext
 {
@@ -59,8 +59,6 @@ public partial class NorthwindContext : DbContext
 
     public virtual DbSet<SalesTotalsByAmount> SalesTotalsByAmounts { get; set; }
 
-    public virtual DbSet<SatışRaporu> SatışRaporus { get; set; }
-
     public virtual DbSet<Shipper> Shippers { get; set; }
 
     public virtual DbSet<SummaryOfSalesByQuarter> SummaryOfSalesByQuarters { get; set; }
@@ -70,6 +68,10 @@ public partial class NorthwindContext : DbContext
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
     public virtual DbSet<Territory> Territories { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("server=DESKTOP-I9V1GOS\\SQLEXPRESS;database=Northwind;uid=sa;pwd=Tugce8417058;TrustServerCertificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -532,26 +534,6 @@ public partial class NorthwindContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.SaleAmount).HasColumnType("money");
             entity.Property(e => e.ShippedDate).HasColumnType("datetime");
-        });
-
-        modelBuilder.Entity<SatışRaporu>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("SatışRaporu");
-
-            entity.Property(e => e.KategoriAdı)
-                .HasMaxLength(15)
-                .HasColumnName("Kategori Adı");
-            entity.Property(e => e.ÇalışanAdSoyad)
-                .HasMaxLength(31)
-                .HasColumnName("Çalışan Ad Soyad");
-            entity.Property(e => e.ÜrünFiyatı)
-                .HasColumnType("money")
-                .HasColumnName("Ürün Fiyatı");
-            entity.Property(e => e.ŞirketAdı)
-                .HasMaxLength(40)
-                .HasColumnName("Şirket Adı");
         });
 
         modelBuilder.Entity<Shipper>(entity =>
