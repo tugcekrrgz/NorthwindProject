@@ -4,33 +4,106 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div>
-    <canvas id="myChart"></canvas>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <canvas id="salesCountryChart"></canvas>
+        </div>
+        <div class="col-md-6">
+            <canvas id="monthlyRevenueChart"></canvas>
+        </div>
+    </div>
 </div>
 
 @section Scripts{
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('myChart');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        var salesData=[];
+
+        $(document).ready(function(){
+            $.ajax({
+                url:"https://localhost:7297/api/orders/getcountrysale",
+                type:"Get",
+                success:function(data){
+                    data.forEach(function(value,index){
+                        salesData.push(value);
+                    })
+                    GetSalesCountryChart();
+                    MonthlyRevenueChart();
+                },
+                error:function(err){
+
+                }
+            })
+        })
+
+
+        function GetSalesCountryChart() {
+
+            //Map
+            var countries = salesData.map(function (value) {
+                return value.shipCountry;
+            })
+
+            var totalOrders = salesData.map(function (value) {
+                return value.totalOrders;
+            })
+
+            var year=salesData.map(function(value){
+                return value.orderDate;
+            })
+
+            console.log(countries);
+
+            console.log(totalOrders);
+
+            const ctx = document.getElementById('salesCountryChart');
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: countries,
+                    datasets: [{
+                        label: year[0],
+                        data: totalOrders,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+
+        function MonthlyRevenueChart(){
+
+            const ctx2 = document.getElementById('monthlyRevenueChart');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: countries,
+                    datasets: [{
+                        label: year[0],
+                        data: totalOrders,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });            
+        }
+
     </script>
 }
 
