@@ -21,5 +21,8 @@ namespace Northwind.BLL.Repositories
 
         //Aylık olarak yapılan satışlardan elde edilen net kazanç
         IEnumerable<MonthlyRevenueDTO> GetMonthlyRevenue(int year, int month);
+
+        //Her kategoride yapılan satış sayısı
+        IEnumerable<SalesCategoriesDTO> GetSalesCategories();
     }
 }

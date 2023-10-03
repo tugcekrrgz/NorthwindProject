@@ -1,4 +1,5 @@
-﻿using Northwind.BLL.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using Northwind.BLL.DTOs;
 using Northwind.BLL.Repositories;
 using Northwind.DAL.Models;
 
@@ -73,6 +74,21 @@ namespace Northwind.BLL.Services
                                   OrderDate=orderYear
                               };
             return salefOfYear;
+        }
+
+        public IEnumerable<SalesCategoriesDTO> GetSalesCategories()
+        {
+            var salescategories = from od in _context.OrderDetails
+                                  join p in _context.Products on od.ProductId equals p.ProductId
+                                  join c in _context.Categories on p.CategoryId equals c.CategoryId
+                                  group od by new { c.CategoryName } into categoryGroup
+                                  orderby categoryGroup.Sum(x=> x.Quantity) descending
+                                  select new SalesCategoriesDTO
+                                  {
+                                      TotalOrders = categoryGroup.Sum(x => x.Quantity),
+                                      CategoryName = categoryGroup.Key.CategoryName
+                                  };
+            return salescategories;
         }
 
         public IEnumerable<ShipStatusDTO> GetShipStatus()

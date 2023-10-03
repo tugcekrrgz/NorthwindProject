@@ -59,5 +59,13 @@ namespace Northwind.API.Controllers
             var monthlyRevenue = _orderRepository.GetMonthlyRevenue(year,month).ToList();
             return Ok(monthlyRevenue);
         }
+
+        [HttpGet]
+        [Route("salescategories")]
+        public IActionResult SalesCategories()
+        {
+            var salescategories = _orderRepository.GetSalesCategories();
+            return Ok(salescategories);
+        }
     }
 }
